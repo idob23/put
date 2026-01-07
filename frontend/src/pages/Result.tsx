@@ -50,13 +50,17 @@ function Result({ result, user }: ResultProps) {
               onClick={() => setShowHealthDetails(!showHealthDetails)}
               style={{
                 marginTop: '15px',
-                padding: '8px 16px',
-                background: 'transparent',
-                border: '1px solid #666',
-                borderRadius: '4px',
+                padding: '10px 18px',
+                background: '#f0f0f0',
+                border: '1px solid #999',
+                borderRadius: '6px',
                 cursor: 'pointer',
-                fontSize: '14px'
+                fontSize: '14px',
+                color: '#333',
+                transition: 'all 0.2s'
               }}
+              onMouseOver={(e) => e.currentTarget.style.background = '#e0e0e0'}
+              onMouseOut={(e) => e.currentTarget.style.background = '#f0f0f0'}
             >
               {showHealthDetails ? '▼ Скрыть детали расчёта' : '▶ Показать детали расчёта'}
             </button>
@@ -68,16 +72,17 @@ function Result({ result, user }: ResultProps) {
                     key={index}
                     style={{
                       marginBottom: '12px',
-                      padding: '10px',
-                      background: '#f8f9fa',
+                      padding: '12px',
+                      background: '#ffffff',
+                      border: '1px solid #e0e0e0',
                       borderRadius: '6px',
-                      borderLeft: index === result.explanations!.health_factors.length - 1 ? '3px solid #28a745' : '3px solid #007bff'
+                      borderLeft: index === result.explanations!.health_factors.length - 1 ? '4px solid #28a745' : '4px solid #007bff'
                     }}
                   >
-                    <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>
+                    <div style={{ fontWeight: 'bold', marginBottom: '6px', color: '#333' }}>
                       {factor.name}: {factor.value}
                     </div>
-                    <div style={{ color: '#555' }}>{factor.description}</div>
+                    <div style={{ color: '#666', fontSize: '13px' }}>{factor.description}</div>
                   </div>
                 ))}
               </div>
@@ -100,13 +105,17 @@ function Result({ result, user }: ResultProps) {
               onClick={() => setShowMoneyDetails(!showMoneyDetails)}
               style={{
                 marginTop: '15px',
-                padding: '8px 16px',
-                background: 'transparent',
-                border: '1px solid #666',
-                borderRadius: '4px',
+                padding: '10px 18px',
+                background: '#f0f0f0',
+                border: '1px solid #999',
+                borderRadius: '6px',
                 cursor: 'pointer',
-                fontSize: '14px'
+                fontSize: '14px',
+                color: '#333',
+                transition: 'all 0.2s'
               }}
+              onMouseOver={(e) => e.currentTarget.style.background = '#e0e0e0'}
+              onMouseOut={(e) => e.currentTarget.style.background = '#f0f0f0'}
             >
               {showMoneyDetails ? '▼ Скрыть детали расчёта' : '▶ Показать детали расчёта'}
             </button>
@@ -118,16 +127,17 @@ function Result({ result, user }: ResultProps) {
                     key={index}
                     style={{
                       marginBottom: '12px',
-                      padding: '10px',
-                      background: '#f8f9fa',
+                      padding: '12px',
+                      background: '#ffffff',
+                      border: '1px solid #e0e0e0',
                       borderRadius: '6px',
-                      borderLeft: '3px solid #ffc107'
+                      borderLeft: '4px solid #ffc107'
                     }}
                   >
-                    <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>
+                    <div style={{ fontWeight: 'bold', marginBottom: '6px', color: '#333' }}>
                       {item.name}: {item.value}
                     </div>
-                    <div style={{ color: '#555' }}>{item.description}</div>
+                    <div style={{ color: '#666', fontSize: '13px' }}>{item.description}</div>
                   </div>
                 ))}
               </div>
