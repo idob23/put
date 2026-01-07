@@ -155,6 +155,112 @@ function Result({ result, user }: ResultProps) {
         </div>
       )}
 
+      {result.recommendations && (
+        <>
+          {/* Рекомендации по здоровью */}
+          {result.recommendations.health.length > 0 && (
+            <div className="result-block" style={{ width: '100%' }}>
+              <h3>🎯 План действий: Здоровье</h3>
+              <p style={{ marginBottom: '15px', color: '#666' }}>
+                Персонализированные рекомендации для увеличения продолжительности жизни
+              </p>
+              {result.recommendations.health.map((rec, index) => (
+                <div
+                  key={index}
+                  style={{
+                    marginBottom: '15px',
+                    padding: '15px',
+                    background: '#fff',
+                    border: `2px solid ${rec.priority === 'high' ? '#dc3545' : '#ffc107'}`,
+                    borderRadius: '8px'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                    <span style={{
+                      padding: '3px 8px',
+                      background: rec.priority === 'high' ? '#dc3545' : '#ffc107',
+                      color: '#fff',
+                      borderRadius: '4px',
+                      fontSize: '12px',
+                      fontWeight: 'bold',
+                      marginRight: '10px'
+                    }}>
+                      {rec.priority === 'high' ? 'ПРИОРИТЕТ' : 'ВАЖНО'}
+                    </span>
+                    <span style={{ fontWeight: 'bold', fontSize: '16px', color: '#333' }}>
+                      {rec.title}
+                    </span>
+                  </div>
+                  <div style={{ color: '#28a745', fontWeight: 'bold', marginBottom: '8px' }}>
+                    {rec.impact}
+                  </div>
+                  <p style={{ color: '#666', marginBottom: '12px' }}>{rec.description}</p>
+                  <div style={{ paddingLeft: '15px' }}>
+                    <strong style={{ fontSize: '14px' }}>Конкретные шаги:</strong>
+                    <ul style={{ marginTop: '8px', color: '#555' }}>
+                      {rec.actions.map((action, i) => (
+                        <li key={i} style={{ marginBottom: '5px' }}>{action}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Финансовые рекомендации */}
+          {result.recommendations.financial.length > 0 && (
+            <div className="result-block" style={{ width: '100%' }}>
+              <h3>💎 План действий: Финансы</h3>
+              <p style={{ marginBottom: '15px', color: '#666' }}>
+                Персонализированные рекомендации для достижения финансовой цели
+              </p>
+              {result.recommendations.financial.map((rec, index) => (
+                <div
+                  key={index}
+                  style={{
+                    marginBottom: '15px',
+                    padding: '15px',
+                    background: '#fff',
+                    border: `2px solid ${rec.priority === 'high' ? '#28a745' : '#17a2b8'}`,
+                    borderRadius: '8px'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                    <span style={{
+                      padding: '3px 8px',
+                      background: rec.priority === 'high' ? '#28a745' : '#17a2b8',
+                      color: '#fff',
+                      borderRadius: '4px',
+                      fontSize: '12px',
+                      fontWeight: 'bold',
+                      marginRight: '10px'
+                    }}>
+                      {rec.priority === 'high' ? 'ПРИОРИТЕТ' : 'ВАЖНО'}
+                    </span>
+                    <span style={{ fontWeight: 'bold', fontSize: '16px', color: '#333' }}>
+                      {rec.title}
+                    </span>
+                  </div>
+                  <div style={{ color: '#28a745', fontWeight: 'bold', marginBottom: '8px' }}>
+                    {rec.impact}
+                  </div>
+                  <p style={{ color: '#666', marginBottom: '12px' }}>{rec.description}</p>
+                  <div style={{ paddingLeft: '15px' }}>
+                    <strong style={{ fontSize: '14px' }}>Конкретные шаги:</strong>
+                    <ul style={{ marginTop: '8px', color: '#555' }}>
+                      {rec.actions.map((action, i) => (
+                        <li key={i} style={{ marginBottom: '5px' }}>{action}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+
       {!user && (
         <div className="result-block save-prompt" style={{ width: '100%' }}>
           <p>💾 <Link to="/register">Зарегистрируйся</Link> чтобы сохранить результат</p>

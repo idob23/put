@@ -47,12 +47,25 @@ export interface Explanation {
   description: string;
 }
 
+export interface Recommendation {
+  priority: 'high' | 'medium' | 'low';
+  title: string;
+  impact: string;
+  description: string;
+  actions: string[];
+}
+
 export interface CalculateResult {
   time: TimeResult;
   money: MoneyResult;
   explanations?: {
     health_factors: Explanation[];
     financial_breakdown: Explanation[];
+  };
+  recommendations?: {
+    health: Recommendation[];
+    financial: Recommendation[];
+    is_premium: boolean;
   };
 }
 

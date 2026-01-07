@@ -243,6 +243,103 @@ def calculate(data: UserData):
             "description": f"Чтобы покрыть разницу в {int(gap):,} ₽/мес на {round(pension_years, 1)} лет пенсии"
         })
 
+    # Генерация персонализированных рекомендаций
+    health_recommendations = []
+    financial_recommendations = []
+
+    # Рекомендации по здоровью
+    if data.smoking:
+        health_recommendations.append({
+            "priority": "high",
+            "title": "Бросить курить",
+            "impact": "+5 лет жизни",
+            "description": "Отказ от курения — самое важное решение для здоровья",
+            "actions": [
+                "Посети врача для консультации",
+                "Рассмотри никотинозаместительную терапию",
+                "Найди группу поддержки или приложение для отслеживания"
+            ]
+        })
+
+    if data.sport == "never" or data.sport == "sometimes":
+        health_recommendations.append({
+            "priority": "high" if data.sport == "never" else "medium",
+            "title": "Больше физической активности",
+            "impact": f"+{3 if data.sport == 'never' else 2} года жизни",
+            "description": "Регулярные тренировки значительно улучшают здоровье и продлевают жизнь",
+            "actions": [
+                "Начни с 30 минут ходьбы 5 раз в неделю",
+                "Запишись в спортзал или на групповые занятия",
+                "Найди спортивного партнёра для мотивации"
+            ]
+        })
+
+    if data.alcohol in ["sometimes", "often"]:
+        health_recommendations.append({
+            "priority": "high" if data.alcohol == "often" else "medium",
+            "title": "Сократить употребление алкоголя",
+            "impact": f"+{3 if data.alcohol == 'often' else 1} год жизни",
+            "description": "Снижение употребления алкоголя улучшает здоровье печени и сердца",
+            "actions": [
+                "Установи лимит: не более 2 порций в неделю",
+                "Замени алкоголь безалкогольными напитками на встречах",
+                "Отслеживай потребление в приложении"
+            ]
+        })
+
+    if data.health_score < 7:
+        health_recommendations.append({
+            "priority": "medium",
+            "title": "Улучшить общее состояние здоровья",
+            "impact": f"+{(7 - data.health_score) * 0.5:.1f} года",
+            "description": "Комплексный подход к здоровью даст значительный эффект",
+            "actions": [
+                "Пройди полное медицинское обследование",
+                "Наладь режим сна (7-8 часов)",
+                "Улучши питание: больше овощей, меньше переработанной еды"
+            ]
+        })
+
+    # Финансовые рекомендации
+    if gap > 0:
+        financial_recommendations.append({
+            "priority": "high",
+            "title": f"Увеличить накопления на {int(needed_monthly_savings):,} ₽/мес",
+            "impact": f"Достигнешь цели {data.desired_pension:,} ₽/мес на пенсии",
+            "description": f"Чтобы получать желаемую пенсию, нужно откладывать больше",
+            "actions": [
+                f"Оптимизируй расходы: найди {int(needed_monthly_savings):,} ₽ для сбережений",
+                "Автоматизируй накопления — настрой автоплатёж в день зарплаты",
+                "Инвестируй в ИИС (индивидуальный инвестиционный счёт) для налогового вычета"
+            ]
+        })
+
+    if monthly_savings > 0 and monthly_savings < data.income * 0.2:
+        financial_recommendations.append({
+            "priority": "medium",
+            "title": "Увеличить долю сбережений",
+            "impact": "Быстрее достигнешь финансовых целей",
+            "description": f"Сейчас откладываешь {int(monthly_savings / data.income * 100)}%, рекомендуется 20%",
+            "actions": [
+                f"Стремись откладывать {int(data.income * 0.2):,} ₽/мес (20% дохода)",
+                "Используй правило 50/30/20: 50% на нужды, 30% на желания, 20% на сбережения",
+                "Отслеживай расходы в приложении (например, Дзен-мани, Wallet)"
+            ]
+        })
+
+    if years_to_retirement > 5:
+        financial_recommendations.append({
+            "priority": "high",
+            "title": "Начать инвестировать",
+            "impact": "Прибыль 7-10% годовых vs 4-6% вклад",
+            "description": f"До пенсии {years_to_retirement} лет — время работает на тебя",
+            "actions": [
+                "Открой брокерский счёт (Тинькофф, Сбер, ВТБ)",
+                "Начни с ETF на индекс Мосбиржи или S&P 500",
+                "Инвестируй регулярно, независимо от рынка (усреднение)"
+            ]
+        })
+
     result = {
         "time": {
             "years": round(years_left, 1),
@@ -261,6 +358,11 @@ def calculate(data: UserData):
         "explanations": {
             "health_factors": factors,
             "financial_breakdown": financial_breakdown
+        },
+        "recommendations": {
+            "health": health_recommendations,
+            "financial": financial_recommendations,
+            "is_premium": False  # Пока бесплатно, потом сделаем paywall
         }
     }
     
