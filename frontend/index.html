@@ -1,79 +1,13 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Путь — Узнай сколько тебе осталось</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <!-- Главная -->
-        <section id="hero" class="section">
-            <h1>Узнай сколько тебе осталось</h1>
-            <p class="subtitle">И хватит ли денег на жизнь которую ты хочешь</p>
-            <button onclick="startQuiz()" class="btn-primary">Рассчитать бесплатно</button>
-        </section>
-
-        <!-- Опросник -->
-        <section id="quiz" class="section hidden">
-            <div class="progress-bar">
-                <div class="progress" id="progress"></div>
-            </div>
-            
-            <div id="question-container">
-                <!-- Вопросы будут здесь -->
-            </div>
-            
-            <div class="nav-buttons">
-                <button onclick="prevQuestion()" id="btn-prev" class="btn-secondary hidden">Назад</button>
-                <button onclick="nextQuestion()" id="btn-next" class="btn-primary">Далее</button>
-            </div>
-        </section>
-
-        <!-- Результат -->
-        <section id="result" class="section hidden">
-            <h2>Твой путь</h2>
-            
-            <div class="result-block">
-                <h3>⏱ Время</h3>
-                <div class="time-grid">
-                    <div class="time-item">
-                        <span class="number" id="years-left">—</span>
-                        <span class="label">лет</span>
-                    </div>
-                    <div class="time-item">
-                        <span class="number" id="months-left">—</span>
-                        <span class="label">месяцев</span>
-                    </div>
-                    <div class="time-item">
-                        <span class="number" id="days-left">—</span>
-                        <span class="label">дней</span>
-                    </div>
-                </div>
-                <p class="note">Из них активных здоровых дней: <strong id="active-days">—</strong></p>
-            </div>
-            
-            <div class="result-block">
-                <h3>💰 Деньги</h3>
-                <p>Если ничего не менять:</p>
-                <ul>
-                    <li>К пенсии накопишь: <strong id="savings-retirement">—</strong> ₽</li>
-                    <li>Пенсия будет: <strong id="monthly-pension">—</strong> ₽/мес</li>
-                </ul>
-            </div>
-            
-            <div class="result-block" id="gap-block">
-                <h3>📊 Реальность</h3>
-                <p>Ты хочешь <strong id="desired">—</strong> ₽/мес на пенсии</p>
-                <p>Разрыв: <strong id="gap">—</strong> ₽/мес</p>
-                <p>Нужно откладывать: <strong id="needed">—</strong> ₽/мес</p>
-            </div>
-            
-            <button onclick="restart()" class="btn-secondary">Пересчитать</button>
-        </section>
-    </div>
-
-    <script src="script.js"></script>
-</body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>frontend</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

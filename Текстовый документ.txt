@@ -1,0 +1,13 @@
+ssh idob230491@158.160.201.123
+
+
+sudo systemctl restart put-backend
+sudo systemctl status put-backend
+
+
+после изменений в vscode на сервере:
+cd /var/www/put && git pull && sudo systemctl restart put-backend
+
+
+cd C:\Users\ID\Desktop\Проект\put\frontend
+http://localhost:5173
