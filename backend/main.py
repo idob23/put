@@ -1,27 +1,39 @@
+import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime, timedelta
 from jose import jwt
 import json
+from dotenv import load_dotenv
 
 from database import create_user, verify_user, save_user_data, get_user_history
 
+# Загружаем переменные из .env
+load_dotenv()
+
 app = FastAPI()
 
-# JWT настройки
-SECRET_KEY = "put-life-secret-key-2026"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_DAYS = 30
+# JWT настройки из переменных окружения
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM", "HS256")
+ACCESS_TOKEN_EXPIRE_DAYS = int(os.getenv("ACCESS_TOKEN_EXPIRE_DAYS", "30"))
+
+# Проверка что SECRET_KEY установлен
+if not SECRET_KEY:
+    raise RuntimeError("SECRET_KEY не установлен! Создайте .env файл.")
+
+# CORS - указываем конкретные домены
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "https://put-life.ru,https://www.put-life.ru").split(",")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=ALLOWED_ORIGINS,
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type", "Authorization"],
 )
 
-# Модели
+# Модели с валидацией
 class UserRegister(BaseModel):
     email: str
     password: str
@@ -34,18 +46,18 @@ class TokenData(BaseModel):
     token: str
 
 class UserData(BaseModel):
-    age: int
+    age: int = Field(ge=1, le=150)
     gender: str
     smoking: bool
     alcohol: str
     sport: str
     chronic_diseases: bool
-    health_score: int
-    income: int
-    expenses: int
-    savings: int
-    retirement_age: int
-    desired_pension: int
+    health_score: int = Field(ge=1, le=10)
+    income: int = Field(ge=0, le=100000000)
+    expenses: int = Field(ge=0, le=100000000)
+    savings: int = Field(ge=0, le=10000000000)
+    retirement_age: int = Field(ge=1, le=150)
+    desired_pension: int = Field(ge=0, le=100000000)
     token: str = None
 
 # Функции
