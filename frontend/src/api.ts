@@ -41,9 +41,19 @@ export interface MoneyResult {
   needed_monthly_savings: number;
 }
 
+export interface Explanation {
+  name: string;
+  value: string;
+  description: string;
+}
+
 export interface CalculateResult {
   time: TimeResult;
   money: MoneyResult;
+  explanations?: {
+    health_factors: Explanation[];
+    financial_breakdown: Explanation[];
+  };
 }
 
 export const register = async (email: string, password: string) => {

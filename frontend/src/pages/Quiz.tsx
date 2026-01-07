@@ -13,7 +13,8 @@ const questions = [
     id: 'age',
     question: 'Сколько тебе лет?',
     type: 'number',
-    hint: 'Введи свой возраст'
+    hint: 'Введи свой возраст',
+    info: 'Возраст — основа для расчёта оставшегося времени жизни'
   },
   {
     id: 'gender',
@@ -22,7 +23,8 @@ const questions = [
     options: [
       { value: 'male', label: 'Мужской' },
       { value: 'female', label: 'Женский' }
-    ]
+    ],
+    info: 'В России средняя продолжительность жизни мужчин 73 года, женщин — 78 лет'
   },
   {
     id: 'smoking',
@@ -31,7 +33,8 @@ const questions = [
     options: [
       { value: true, label: 'Да' },
       { value: false, label: 'Нет' }
-    ]
+    ],
+    info: 'Курение сокращает жизнь в среднем на 5-10 лет и повышает риск рака и сердечно-сосудистых заболеваний'
   },
   {
     id: 'alcohol',
@@ -41,7 +44,8 @@ const questions = [
       { value: 'never', label: 'Не пью' },
       { value: 'sometimes', label: 'Иногда' },
       { value: 'often', label: 'Часто' }
-    ]
+    ],
+    info: 'Регулярное употребление алкоголя негативно влияет на печень, сердце и нервную систему (-3 года), даже умеренное имеет небольшое влияние (-1 год)'
   },
   {
     id: 'sport',
@@ -51,7 +55,8 @@ const questions = [
       { value: 'never', label: 'Нет' },
       { value: 'sometimes', label: 'Иногда' },
       { value: 'regular', label: 'Регулярно' }
-    ]
+    ],
+    info: 'Регулярная физическая активность продлевает жизнь на 3+ года, укрепляет сердце и снижает риск болезней'
   },
   {
     id: 'chronic_diseases',
@@ -60,43 +65,50 @@ const questions = [
     options: [
       { value: true, label: 'Да' },
       { value: false, label: 'Нет' }
-    ]
+    ],
+    info: 'Хронические заболевания требуют постоянного контроля и в среднем сокращают жизнь на 4 года'
   },
   {
     id: 'health_score',
     question: 'Как оцениваешь своё здоровье?',
     type: 'number',
-    hint: 'От 1 (плохо) до 10 (отлично)'
+    hint: 'От 1 (плохо) до 10 (отлично)',
+    info: 'Самооценка здоровья коррелирует с реальным состоянием. Каждый балл выше 5 добавляет 0.5 года, ниже — вычитает'
   },
   {
     id: 'income',
     question: 'Доход в месяц?',
     type: 'number',
-    hint: 'В рублях'
+    hint: 'В рублях',
+    info: 'Твой ежемесячный доход до вычета расходов'
   },
   {
     id: 'expenses',
     question: 'Расходы в месяц?',
     type: 'number',
-    hint: 'В рублях'
+    hint: 'В рублях',
+    info: 'Сколько тратишь в месяц. Разница между доходом и расходами — это твои накопления'
   },
   {
     id: 'savings',
     question: 'Накопления сейчас?',
     type: 'number',
-    hint: 'В рублях'
+    hint: 'В рублях',
+    info: 'Твои текущие сбережения — стартовый капитал для расчёта пенсионных накоплений'
   },
   {
     id: 'retirement_age',
     question: 'Во сколько лет хочешь перестать работать?',
     type: 'number',
-    hint: 'Желаемый возраст выхода на пенсию'
+    hint: 'Желаемый возраст выхода на пенсию',
+    info: 'Возраст, когда планируешь выйти на пенсию. Официально: мужчины 65, женщины 60 лет'
   },
   {
     id: 'desired_pension',
     question: 'Сколько хочешь получать на пенсии?',
     type: 'number',
-    hint: 'Рублей в месяц'
+    hint: 'Рублей в месяц',
+    info: 'Желаемый уровень дохода на пенсии. Поможем рассчитать, сколько нужно откладывать для этой цели'
   }
 ];
 
@@ -166,6 +178,20 @@ function Quiz({ user, onResult }: QuizProps) {
 
       <div className="question">
         <h3>{q.question}</h3>
+
+        {q.info && (
+          <div style={{
+            fontSize: '14px',
+            color: '#666',
+            background: '#f0f8ff',
+            padding: '10px 15px',
+            borderRadius: '6px',
+            marginBottom: '20px',
+            borderLeft: '3px solid #4a90e2'
+          }}>
+            💡 {q.info}
+          </div>
+        )}
 
         {q.type === 'choice' && (
           <div className="options">

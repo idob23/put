@@ -106,41 +106,143 @@ def verify_token_endpoint(data: TokenData):
 def calculate(data: UserData):
     # Расчёт оставшихся лет жизни
     base_life = 73 if data.gender == "male" else 78
-    
+    initial_life = base_life
+
+    # Объяснения влияния факторов
+    factors = []
+    factors.append({
+        "name": "Базовая продолжительность",
+        "value": f"{initial_life} лет",
+        "description": f"Средняя продолжительность жизни для {'мужчин' if data.gender == 'male' else 'женщин'} в России"
+    })
+
     if data.smoking:
         base_life -= 5
+        factors.append({
+            "name": "Курение",
+            "value": "-5 лет",
+            "description": "Курение сокращает продолжительность жизни в среднем на 5-10 лет из-за риска рака и сердечно-сосудистых заболеваний"
+        })
+
     if data.alcohol == "often":
         base_life -= 3
+        factors.append({
+            "name": "Частое употребление алкоголя",
+            "value": "-3 года",
+            "description": "Регулярное употребление алкоголя негативно влияет на печень, сердце и нервную систему"
+        })
     elif data.alcohol == "sometimes":
         base_life -= 1
+        factors.append({
+            "name": "Умеренное употребление алкоголя",
+            "value": "-1 год",
+            "description": "Даже умеренное употребление алкоголя имеет небольшое негативное влияние на здоровье"
+        })
+
     if data.sport == "regular":
         base_life += 3
+        factors.append({
+            "name": "Регулярные занятия спортом",
+            "value": "+3 года",
+            "description": "Регулярная физическая активность укрепляет сердце, снижает риск многих заболеваний"
+        })
     elif data.sport == "sometimes":
         base_life += 1
+        factors.append({
+            "name": "Периодические занятия спортом",
+            "value": "+1 год",
+            "description": "Даже нерегулярная физическая активность положительно влияет на здоровье"
+        })
+
     if data.chronic_diseases:
         base_life -= 4
-    
+        factors.append({
+            "name": "Хронические заболевания",
+            "value": "-4 года",
+            "description": "Хронические болезни требуют постоянного контроля и снижают общую продолжительность жизни"
+        })
+
     health_adjustment = (data.health_score - 5) * 0.5
-    base_life += health_adjustment
-    
+    if health_adjustment != 0:
+        base_life += health_adjustment
+        factors.append({
+            "name": "Общее состояние здоровья",
+            "value": f"{'+' if health_adjustment > 0 else ''}{round(health_adjustment, 1)} лет",
+            "description": f"Твоя самооценка здоровья ({data.health_score}/10) {'выше' if health_adjustment > 0 else 'ниже'} среднего"
+        })
+
     years_left = max(1, base_life - data.age)
     months_left = years_left * 12
     weeks_left = years_left * 52
     days_left = years_left * 365
     active_days = int(days_left * 0.5)
-    
+
+    factors.append({
+        "name": "Итоговая продолжительность",
+        "value": f"{round(base_life, 1)} лет",
+        "description": f"С учётом всех факторов, ожидаемый возраст: {round(base_life, 1)} лет. Осталось примерно {round(years_left, 1)} лет"
+    })
+
+    # Финансовые расчёты
     monthly_savings = data.income - data.expenses
     years_to_retirement = max(0, data.retirement_age - data.age)
     savings_at_retirement = data.savings + (monthly_savings * 12 * years_to_retirement)
     pension_years = max(1, base_life - data.retirement_age)
     state_pension = 15000
     monthly_pension = (savings_at_retirement / (pension_years * 12)) + state_pension
-    
+
+    financial_breakdown = []
+    financial_breakdown.append({
+        "name": "Ежемесячные накопления",
+        "value": f"{monthly_savings:,} ₽",
+        "description": f"Доход {data.income:,} ₽ - Расходы {data.expenses:,} ₽ = {monthly_savings:,} ₽/мес"
+    })
+
+    financial_breakdown.append({
+        "name": "Время до пенсии",
+        "value": f"{years_to_retirement} лет",
+        "description": f"С {data.age} до {data.retirement_age} лет осталось {years_to_retirement} лет работы"
+    })
+
+    financial_breakdown.append({
+        "name": "Накопления к пенсии",
+        "value": f"{savings_at_retirement:,} ₽",
+        "description": f"Текущие накопления {data.savings:,} ₽ + ({monthly_savings:,} ₽/мес × 12 × {years_to_retirement} лет)"
+    })
+
+    financial_breakdown.append({
+        "name": "Пенсионный период",
+        "value": f"{round(pension_years, 1)} лет",
+        "description": f"С {data.retirement_age} до {round(base_life, 1)} лет — период на пенсии"
+    })
+
+    financial_breakdown.append({
+        "name": "Пенсия от накоплений",
+        "value": f"{int(savings_at_retirement / (pension_years * 12)):,} ₽/мес",
+        "description": f"Накопления {savings_at_retirement:,} ₽ распределённые на {round(pension_years, 1)} лет"
+    })
+
+    financial_breakdown.append({
+        "name": "Государственная пенсия",
+        "value": f"{state_pension:,} ₽/мес",
+        "description": "Примерная средняя пенсия по России (может отличаться)"
+    })
+
     gap = data.desired_pension - monthly_pension
     needed_monthly_savings = 0
     if gap > 0 and years_to_retirement > 0:
         needed_monthly_savings = (gap * pension_years * 12) / (years_to_retirement * 12)
-    
+        financial_breakdown.append({
+            "name": "Недостаток пенсии",
+            "value": f"{int(gap):,} ₽/мес",
+            "description": f"Хочешь {data.desired_pension:,} ₽/мес, получишь {int(monthly_pension):,} ₽/мес. Разница: {int(gap):,} ₽/мес"
+        })
+        financial_breakdown.append({
+            "name": "Нужно откладывать дополнительно",
+            "value": f"{int(needed_monthly_savings):,} ₽/мес",
+            "description": f"Чтобы покрыть разницу в {int(gap):,} ₽/мес на {round(pension_years, 1)} лет пенсии"
+        })
+
     result = {
         "time": {
             "years": round(years_left, 1),
@@ -155,6 +257,10 @@ def calculate(data: UserData):
             "desired_pension": data.desired_pension,
             "gap": int(max(0, gap)),
             "needed_monthly_savings": int(max(0, needed_monthly_savings))
+        },
+        "explanations": {
+            "health_factors": factors,
+            "financial_breakdown": financial_breakdown
         }
     }
     
